@@ -32,7 +32,7 @@ pub fn spawn_runner(job: &str, id: &str, extra: &[&str]) -> u32 {
     for k in DROP_ENV { c.env_remove(k); }
     match log { Ok(f) => { let f2 = f.try_clone().ok(); c.stdout(f); if let Some(f2) = f2 { c.stderr(f2); } } Err(_) => { c.stdout(Stdio::null()).stderr(Stdio::null()); } }
     detach(&mut c);
-    c.spawn().map(|ch| ch.id()).unwrap_or(0)
+    crate::spawn::spawn_reaped(&mut c)
 }
 /// Tests drain the jobs that would have been detached.
 pub fn drain_jobs(run: &dyn Fn(&str, &str, &[String])) {
@@ -50,7 +50,7 @@ pub fn detached_sh(cmd: &str, env: &[(&str, String)]) {
     c.args(["-c", cmd]).stdin(Stdio::null()).stdout(Stdio::null()).stderr(Stdio::null());
     for (k, v) in env { c.env(k, v); }
     detach(&mut c);
-    let _ = c.spawn();
+    crate::spawn::spawn_reaped(&mut c);
 }
 pub fn runner_alive(t: &Task) -> bool { marker_alive(t.at("runner")) }
 fn mine(m: &Value) -> bool { m.i("pid") == std::process::id() as i64 }

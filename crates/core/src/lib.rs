@@ -12,6 +12,7 @@ pub mod http;
 pub mod json;
 pub mod login_env;
 pub mod research;
+pub mod spawn;
 pub mod status_words;
 pub mod store;
 pub mod text;
