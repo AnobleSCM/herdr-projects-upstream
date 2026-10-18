@@ -27,7 +27,6 @@ pub mod remote;
 pub mod review_page;
 pub mod runner;
 pub mod shown;
-pub mod spawn;
 pub mod state;
 pub mod status_kept;
 pub mod submit;

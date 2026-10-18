@@ -9,7 +9,8 @@ pub fn spawn_reaped(c: &mut Command) -> u32 {
     match c.spawn() { Ok(ch) => { let pid = ch.id(); reap(ch); pid } Err(_) => 0 }
 }
 
-/// Collects the exit of `ch` on a thread of its own. A program that ends first leaves the child to its new parent.
+/// Collects the exit of `ch` on a thread of its own. A program that ends first leaves the child to its new parent. A
+/// thread that cannot be started leaves the child as it was before (not collected): nothing here may fail the caller.
 pub fn reap(mut ch: Child) {
     let _ = std::thread::Builder::new().name("reap".into()).spawn(move || { let _ = ch.wait(); });
 }

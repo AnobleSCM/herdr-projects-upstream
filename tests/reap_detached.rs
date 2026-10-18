@@ -21,7 +21,7 @@ fn until_gone(pid: u32, secs: u64) -> String {
 }
 
 #[test]
-fn a_detached_process_that_ends_leaves_no_zombie_behind() {
+fn real_programs_a_detached_process_that_ends_leaves_no_zombie_behind() {
     let mut c = Command::new("sh");
     c.args(["-c", "exit 0"]);
     let pid = sw::spawn::spawn_reaped(&mut c);
@@ -31,15 +31,15 @@ fn a_detached_process_that_ends_leaves_no_zombie_behind() {
 }
 
 #[test]
-fn a_process_that_cannot_start_returns_zero() {
+fn real_programs_a_process_that_cannot_start_returns_zero() {
     let mut c = Command::new("/nonexistent/herdr-projects-no-such-program");
     assert_eq!(sw::spawn::spawn_reaped(&mut c), 0);
 }
 
 #[test]
-fn a_process_still_running_is_left_running_and_is_collected_when_it_ends() {
+fn real_programs_a_process_still_running_is_left_running_and_is_collected_when_it_ends() {
     let mut c = Command::new("sh");
-    c.args(["-c", "sleep 1"]);
+    c.args(["-c", "sleep 3"]);
     let pid = sw::spawn::spawn_reaped(&mut c);
     assert!(pid > 0);
     let s = state(pid);
